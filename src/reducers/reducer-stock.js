@@ -33,11 +33,17 @@ const stockReducer = (state = initialState, action) =>{
     switch(action.type){
         case 'STOCK_UPDATE':
             const newStocks = JSON.parse(JSON.stringify(state))
+            var withoutStock = {}
             for(var i = 0; i < newStocks.stocks.length; i++){
                 if(newStocks.stocks[i]._id === action.payload._id){
                     newStocks.stocks[i].favourite = !newStocks.stocks[i].favourite;
+                    var withoutStock = newStocks.stocks.filter(stock => stock._id !== action.payload._id)
+                    withoutStock.push(newStocks.stocks[i])
                 }
             }
+
+            newStocks.stocks = withoutStock; 
+
             return newStocks
         default:
             return state

@@ -14,6 +14,11 @@ body{
 }
 
 
+.chartjs-size-monitor{
+    height: 0;
+    width: 0;
+}
+
 img{
     width: 5em;
     height: 5em;
@@ -132,12 +137,11 @@ img{
 }
 
 .watch-data{
-    height: 10em;
+    height: 15em;
     overflow: hidden;
     padding: 1em;
     background-color: white;
 }
-
 
 
 .stock-info{
@@ -167,6 +171,7 @@ img{
     height: 1px;
   }
 
+
 .watch-list  hr {
     border: 0;
     clear:both;
@@ -193,7 +198,7 @@ img{
     overflow-y: scroll;
     background-color: #F4F4F4;
     border-right: 4px solid rgba(55, 55, 55, 0.3);
-    width: 15%;
+    width: 20%;
     
 }
 

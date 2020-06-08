@@ -3,6 +3,8 @@ import WatchStocks from './WatchStocks';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { updateStock } from '../actions/index';
+import { useDrop, useDrag} from 'react-dnd';
+import { ItemTypes } from '../utils/items';
 
 
 const WatchList = (props) =>  {
@@ -47,15 +49,23 @@ const WatchList = (props) =>  {
 	   props.updateStock(data);
    }
 
+   const [{isOver}, drop] = useDrop({
+	accept: ItemTypes.STOCK,
+	drop: (item, monitor) => toggleFavourite(item.stock),
+	collect: monitor => ({
+		isOver: !!monitor.isOver(),
+	})
+   })
+
 	return(
-		<div className="watch-list">
+		<div className="watch-list" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
 				<div className="header">
 					<p style={{display: 'inline'}} className="chevron">></p><p>My Watchlist</p>
 				</div>
 				<hr style={{borderWidth: "1px"}}/>
 				{stockArray.map((data, id) => (
-					<div onClick={() => toggleFavourite(data)}>
-							<WatchStocks borderCol={'red'} data={data} index={id}/>
+					<div>
+							<WatchStocks borderCol={'red'} data={data} index={id} />
 						<hr/>
 					</div>
 				))}

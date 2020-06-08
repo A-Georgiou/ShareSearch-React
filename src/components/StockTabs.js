@@ -5,6 +5,9 @@ import { bindActionCreators } from 'redux';
 import NavComp from './NavComp';
 import {connect} from 'react-redux';
 import { updateStock } from '../actions/index';
+import { useDrop, useDrag} from 'react-dnd';
+import { ItemTypes } from '../utils/items';
+
 
 const StockTabs = (props) => {
     var templateLineElem = {
@@ -53,23 +56,34 @@ const StockTabs = (props) => {
         props.updateStock(data);
     }
 
+    const [{isOver}, drop] = useDrop({
+        accept: ItemTypes.STOCK_LIST,
+        drop: (item, monitor) => props.updateStock(item.stock_list),
+        collect: monitor => ({
+            isOver: !!monitor.isOver(),
+        })
+       })
+
+
 	return(
-        <Nav tabs className="stock-tabs">
-            {stockArray.map((stockItem, index) => (
-                <div>
-                    <NavComp toggleFunc={setActiveTab}  stockItem={stockItem} index={index} activeTab={activeTab}/>
-                </div>
-            ))}
-            <TabContent activeTab={activeTab}>
+        <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
+            <Nav tabs>
                 {stockArray.map((stockItem, index) => (
-                    <TabPane tabId={index}>
-                        <Row>
-                            <StockBody starsCount={stockItem.starRating} data={stockItem} index={index} toggleFavourite={toggleFavourite}/>
-                        </Row>
-                    </TabPane>
+                    <div>
+                        <NavComp toggleFunc={setActiveTab}  stockItem={stockItem} index={index} activeTab={activeTab}/>
+                    </div>
                 ))}
-            </TabContent>
-        </Nav>
+                <TabContent activeTab={activeTab}>
+                    {stockArray.map((stockItem, index) => (
+                        <TabPane tabId={index}>
+                            <Row>
+                                <StockBody starsCount={stockItem.starRating} data={stockItem} index={index} toggleFavourite={toggleFavourite}/>
+                            </Row>
+                        </TabPane>
+                    ))}
+                </TabContent>
+            </Nav>
+        </div>
 	);
 }
 
