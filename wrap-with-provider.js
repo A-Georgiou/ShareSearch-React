@@ -13,9 +13,9 @@ export default ({ element }) => {
   const store = generatedStore;
   return (
     <Provider store={store}>
-      <DndProvider backend={HTML5Backend}>
-        {element}
-      </DndProvider>
+        <DndProvider backend={HTML5Backend}>
+          {element}
+        </DndProvider>
     </Provider>
     )
 }

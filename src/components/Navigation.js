@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Avatar from './Avatar';
+
 import {
     Collapse,
     Navbar,
@@ -16,7 +17,7 @@ import {
     DropdownMenu
   } from 'reactstrap';
 
-const Navigation = (props) =>{
+const Navigation = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
@@ -28,30 +29,31 @@ const Navigation = (props) =>{
                 <NavbarToggler onClick={toggle} />
                 <Collapse isOpen={isOpen} navbar className="d-flex justify-content-end">
                     <Nav navbar>
-                        <Form inline>
+                        <Form inline style={props.displaySearch ? {} : {display: 'none'}}>
                             <FormGroup>
                                 <Input type="text" placeholder="Search Stock" className="mr-sm-2 p-3" id="search-bar"/>
                                 <Button variant="outline-success" className="mr-sm-3"><b>Search</b></Button>
                             </FormGroup>
                         </Form>
+
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav>
-                            <Avatar name="AG"/>
+                            <Avatar name='USER'/>
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <DropdownItem tag="a" href="/">
                                     Home
                                 </DropdownItem>
-                                <DropdownItem tag="a" href="/profile_page">
-                                    Profile Page
-                                </DropdownItem>
-                                <DropdownItem tag="a" href="/my_stocks">
-                                    My Stocks
-                                </DropdownItem>
+                                    <DropdownItem tag="a" href="/profile_page">
+                                            Profile Page
+                                    </DropdownItem>
+                                    <DropdownItem tag="a" href="/my_stocks">
+                                            My Stocks
+                                    </DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem>
-                                    Logout
-                                </DropdownItem>
+                                    <DropdownItem tag="a" href="/account_page">
+                                        Login
+                                    </DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>

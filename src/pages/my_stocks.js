@@ -1,15 +1,12 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
-
+import WatchList from '../components/WatchList';
 class Profile extends React.Component {
 	render(){
 		return(
 			<div>
 				<Navigation/>
-				<div className="my-stocks">
-					<p>Email Address:</p>
-					<p>Contact Number:</p>
-				</div>
+				<WatchList/>
 			</div>
 		);
 	}
