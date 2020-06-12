@@ -4,3 +4,16 @@ export const updateStock = (payload) => {
         payload,
     }
 }
+
+export const updateUser = (payload) => {
+    return{
+        type: 'UPDATE_USER',
+        payload,
+    }
+}
+
+export const logoutUser = () => {
+    return{
+        type: 'LOGOUT_USER'
+    }
+}

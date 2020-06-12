@@ -69,13 +69,13 @@ const StockTabs = (props) => {
         <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
             <Nav tabs>
                 {stockArray.map((stockItem, index) => (
-                    <div>
+                    <div key={index}>
                         <NavComp toggleFunc={setActiveTab}  stockItem={stockItem} index={index} activeTab={activeTab}/>
                     </div>
                 ))}
                 <TabContent activeTab={activeTab}>
                     {stockArray.map((stockItem, index) => (
-                        <TabPane tabId={index}>
+                        <TabPane tabId={index} key={index}>
                             <Row>
                                 <StockBody starsCount={stockItem.starRating} data={stockItem} index={index} toggleFavourite={toggleFavourite}/>
                             </Row>

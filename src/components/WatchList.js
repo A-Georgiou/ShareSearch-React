@@ -33,7 +33,7 @@ const WatchList = (props) =>  {
 
    const stockData = props.stock.stocks.filter((data) => {return data.favourite === true});
    const stockArray = [];
-   console.log(stockArray);
+   
    stockData.forEach((data) => {
 	   var copyTemplate = JSON.parse(JSON.stringify(templateLineElem));
 	   copyTemplate._id = data._id;
@@ -64,8 +64,8 @@ const WatchList = (props) =>  {
 				</div>
 				<hr style={{borderWidth: "1px"}}/>
 				{stockArray.map((data, id) => (
-					<div>
-							<WatchStocks borderCol={'red'} data={data} index={id} />
+					<div key={id}>
+							<WatchStocks borderCol={'red'} data={data} index={id}  />
 						<hr/>
 					</div>
 				))}

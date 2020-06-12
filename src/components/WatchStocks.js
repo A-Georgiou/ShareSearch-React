@@ -47,7 +47,7 @@ const WatchStocks = (props) => {
     })
 
 	return(
-            <div className="watch-data" ref={drag} canDrag={true} style={isDragging ? {opacity: '0.1'} : {}}>
+            <div className="watch-data" ref={drag} style={isDragging ? {opacity: '0.1'} : {}}>
                 <div className="watch-list-info">
                     <Badge color="secondary" style={{fontSize: '1.5em'}}>{props.data.name}:</Badge>
                     <h5>P<p>10</p></h5>

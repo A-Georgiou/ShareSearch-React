@@ -15,7 +15,7 @@ class StockInfo extends React.Component {
 			type = 'far';
 		}
 		rating--;
-		starsArray.push(<FontAwesomeIcon icon={[type, 'star']} color={color} />);
+		starsArray.push(<FontAwesomeIcon icon={[type, 'star']} color={color} key={i}/>);
     }
     
 		return(
