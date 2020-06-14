@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from './Avatar';
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateStock } from '../actions/index';
 
-import VerifyUserDetails from '../components/VerifyUserDetails';
 import {
     Collapse,
     Navbar,
@@ -17,16 +19,36 @@ import {
     DropdownToggle,
     DropdownMenu
   } from 'reactstrap';
-
-import { connect } from 'react-redux';
+import axios from 'axios';
 
 const Navigation = (props) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(true);
+    const [searchBar, setSearchBar] = useState("");
+
     const toggle = () => setIsOpen(!isOpen);
     var currUser = '';
-    if(props.user.name != ''){
-        currUser = props.user.name.split(" ").map((n)=>n[0]).join("")
+
+    if(localStorage.getItem("userInformation") !== null){
+        currUser = JSON.parse(localStorage.getItem("userInformation")).name.split(" ").map((n)=>n[0]).join("");
     }
+
+    const logoutUser = () => {
+         axios.post('http://localhost:3000/api/user/logout', {}, {withCredentials: true})
+             .then(res => {
+                 localStorage.clear();
+                 setLoggedIn(false);
+             }).catch(err=>{console.log('cannot log user out')})
+    }
+
+    const handleChange = (e) => {
+        setSearchBar(e.target.value);
+    }
+
+    const handleSubmit = (e) => {
+        props.updateStock(searchBar);
+    }
+
 	return(
 			<Navbar dark expand="md" className="navigation-bar">
                 <NavbarBrand href="/" className="d-flex justify-content-start">
@@ -38,13 +60,11 @@ const Navigation = (props) => {
                         {props.displaySearch ? 
                         (<Form inline>
                             <FormGroup>
-                                <Input type="text" placeholder="Search Stock" className="mr-sm-2 p-3" id="search-bar"/>
-                                <Button variant="outline-success" className="mr-sm-3"><b>Search</b></Button>
+                                <Input type="text" placeholder="Search Stock" className="mr-sm-2 p-3" id="search-bar" value={searchBar} onChange={handleChange}/>
+                                <Button variant="outline-success" className="mr-sm-3" onClick={handleSubmit}><b>Search</b></Button>
                             </FormGroup>
                         </Form>) : 
                         (<div></div>)}
-                        
-
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav>
                             <Avatar name={currUser ? currUser : ''}/>
@@ -53,19 +73,25 @@ const Navigation = (props) => {
                                 <DropdownItem tag="a" href="/">
                                     Home
                                 </DropdownItem>
-                                    <DropdownItem tag="a" href="/profile_page">
-                                        Profile Page
-                                    </DropdownItem>
-                                    <DropdownItem tag="a" href="/my_stocks">
-                                        My Stocks
-                                    </DropdownItem>
+                                {currUser !== '' ? (
+                                    <React.Fragment>
+                                        <DropdownItem tag="a" href="/profile_page">
+                                            Profile Page
+                                        </DropdownItem>
+                                        <DropdownItem tag="a" href="/my_stocks">
+                                            My Stocks
+                                        </DropdownItem>
+                                    </React.Fragment>
+                                ) : (
+                                    <div></div>
+                                )}
                                 <DropdownItem divider />
-                                {props.user._id === 0 ? (
+                                {currUser === '' ? (
                                     <DropdownItem tag="a" href="/account_page">
                                         Log in
                                     </DropdownItem>
                                 ) : (
-                                    <DropdownItem tag="a" href="/account_page">
+                                    <DropdownItem tag="a" href="/" onClick={logoutUser}>
                                         Logout
                                     </DropdownItem>
                                 )}
@@ -74,13 +100,13 @@ const Navigation = (props) => {
                         </UncontrolledDropdown>
                     </Nav>
                 </Collapse>
-                <VerifyUserDetails />
 			</Navbar>      
 	);
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user
-})
 
-export default connect(mapStateToProps, null)(Navigation);
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({updateStock}, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(Navigation);

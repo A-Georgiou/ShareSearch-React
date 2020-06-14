@@ -5,15 +5,9 @@ export const updateStock = (payload) => {
     }
 }
 
-export const updateUser = (payload) => {
+export const removeStock = (payload) => {
     return{
-        type: 'UPDATE_USER',
+        type: 'REMOVE_STOCK',
         payload,
-    }
-}
-
-export const logoutUser = () => {
-    return{
-        type: 'LOGOUT_USER'
     }
 }

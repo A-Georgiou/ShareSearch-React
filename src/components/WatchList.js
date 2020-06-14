@@ -1,57 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WatchStocks from './WatchStocks';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateStock } from '../actions/index';
+import { updateStock, removeStock } from '../actions/index';
 import { useDrop, useDrag} from 'react-dnd';
 import { ItemTypes } from '../utils/items';
-
+import axios from 'axios';
 
 const WatchList = (props) =>  {
-	var templateLineElem = {
-		_id: 0,
-	   favourite: true,
-	   name: '',
-	   starRating: 0,
-	   labels: [],
-	   datasets: [{
-			   label: 'Stock Market Data',
-			   fill: true,
-			   lineTension: 0.2,
-			   backgroundColor: 'rgba(75,192,192,0.1)',
-			   borderColor: 'rgba(75,192,192,1.0)',
-			   data: []
-	   },{
-			   label: 'Google Trends',
-			   fill: true,
-			   lineTension: 0.2,
-			   backgroundColor: 'rgba(75,192,192,0.1)',
-			   borderColor: 'rgba(75,192,192,1.0)',
-			   data: []
-	   }],
-   }
+   	const [stockArray, setStockArray] = useState([]);
+	const [updatedVal, setUpdatedVal] = useState(0);
+  useEffect(() => {
+	async function fetchData(){
 
-   const stockData = props.stock.stocks.filter((data) => {return data.favourite === true});
-   const stockArray = [];
-   
-   stockData.forEach((data) => {
-	   var copyTemplate = JSON.parse(JSON.stringify(templateLineElem));
-	   copyTemplate._id = data._id;
-	   copyTemplate.name = data.name;
-	   copyTemplate.starRating = data.starRating;
-	   copyTemplate.labels = data.labels;
-	   copyTemplate.datasets[0].data = data.stockData;
-	   copyTemplate.datasets[1].data = data.googleData;
-	   stockArray.push(copyTemplate);
-   })
+        const result = await axios.get('http://localhost:3000/api/posts/favourites', {withCredentials: true})
+        localStorage.setItem('favourites', JSON.stringify(result.data.favourites))
+        const favourites = result.data.favourites;
+        let stock = [];
+        for(var i = 0; i < favourites.length; i++){
+            const apiUrl = `http://localhost:3001/api/getBothData?symbol=${favourites[i]}`;
+			const resultAPI = await axios.get(apiUrl);
+			resultAPI.data.historicalStock = resultAPI.data.historicalStock.reverse();
+            stock.push(resultAPI.data);
+        }
+        
+        setStockArray(stock);
+        }
 
-   function toggleFavourite(data){
-	   props.updateStock(data);
+        fetchData();
+  }, [updatedVal, props.stock.stocks]);
+
+   async function toggleFavourite(data){
+		if (stockArray.filter(e => e.symbol === data.stock.symbol).length > 0) {
+			console.log('value already exists');
+		}else{
+			const result = await axios.post('http://localhost:3000/api/posts/stock_favourite', {favourite: data.stock.symbol}, {withCredentials: true});
+			var localData = JSON.parse(localStorage.getItem("searched-stocks"));
+            localData = localData.filter(symbol =>  symbol !== data.stock.symbol)
+            localStorage.setItem("searched-stocks", JSON.stringify(localData));
+			await props.removeStock(data.stock.symbol);
+			await setUpdatedVal(updatedVal+1);
+		}
    }
 
    const [{isOver}, drop] = useDrop({
 	accept: ItemTypes.STOCK,
-	drop: (item, monitor) => toggleFavourite(item.stock),
+	drop: (item, monitor) => toggleFavourite(item),
 	collect: monitor => ({
 		isOver: !!monitor.isOver(),
 	})
@@ -78,7 +72,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({updateStock}, dispatch)
+    return bindActionCreators({updateStock, removeStock}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WatchList);

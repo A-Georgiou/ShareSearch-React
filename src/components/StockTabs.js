@@ -1,72 +1,80 @@
 import React, { useState, useEffect} from 'react';
-import StockBody from './StockBody';
+import StockNewBody from './StockNewBody';
 import { TabContent, TabPane, Nav, Row} from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import NavComp from './NavComp';
 import {connect} from 'react-redux';
-import { updateStock } from '../actions/index';
+import { updateStock, removeStock } from '../actions/index';
 import { useDrop, useDrag} from 'react-dnd';
 import { ItemTypes } from '../utils/items';
-
+import axios from 'axios';
+import stock from '../../../sharesearch-stock-service/models/stock';
 
 const StockTabs = (props) => {
-    var templateLineElem = {
-         _id: 0,
-        favourite: false,
-        name: '',
-        starRating: 0,
-        labels: [],
-        datasets: [{
-                label: 'Stock Market Data',
-                fill: true,
-                lineTension: 0.2,
-                backgroundColor: 'rgba(75,192,192,0.1)',
-                borderColor: 'rgba(75,192,192,1.0)',
-                data: []
-        },{
-                label: 'Google Trends',
-                fill: true,
-                lineTension: 0.2,
-                backgroundColor: 'rgba(75,192,192,0.1)',
-                borderColor: 'rgba(75,192,192,1.0)',
-                data: []
-        }],
-    }
 
-    const stockData = props.stock.stocks.filter((data) => {return data.favourite === false});
-    const stockArray = [];
+    const [stockArray, setStockArray] = useState([]);
 
-    stockData.forEach((data) => {
-        var copyTemplate = JSON.parse(JSON.stringify(templateLineElem));
-        copyTemplate._id = data._id;
-        copyTemplate.name = data.name;
-        copyTemplate.starRating = data.starRating;
-        copyTemplate.labels = data.labels;
-        copyTemplate.datasets[0].data = data.stockData;
-        copyTemplate.datasets[1].data = data.googleData;
-        stockArray.push(copyTemplate);
-    })
+    useEffect( () => {
+        var newLocal = [];
+        if(localStorage.getItem("searched-stocks")){
+            const localStorageStocks = JSON.parse(localStorage.getItem("searched-stocks"));
+            const propStocks = props.stock.stocks;
+
+            newLocal = localStorageStocks.concat(propStocks.filter((item) => localStorageStocks.indexOf(item) < 0))
+        }else{
+            newLocal = props.stock.stocks;
+        }
+
+        localStorage.setItem("searched-stocks", JSON.stringify(newLocal));
+
+        async function fetchData(){
+            const result = JSON.parse(localStorage.getItem("searched-stocks"));
+            let stock = [];
+            for(var i = 0; i < result.length; i++){
+                const apiUrl = `http://localhost:3001/api/getBothData?symbol=${result[i]}`;
+                const resultAPI = await axios.get(apiUrl);
+                resultAPI.data.historicalStock = resultAPI.data.historicalStock.reverse();
+                stock.push(resultAPI.data);
+            }
+            setStockArray(stock);
+        }
+        fetchData();
+      }, [props.stock.stocks]);
 
     const [activeTab, setActiveTab] = useState(0);
 
-    function toggleFavourite(data, index){
-        if(activeTab === index && stockData.length > 0){
-            setActiveTab(0);
+    async function toggleFavourite(data){
+        setActiveTab(0);
+        if (stockArray.filter(e => e.symbol === data.stock_list.symbol).length > 0) {
+            console.log('value already exists');
+        }else{
+            const result = await axios.post('http://localhost:3000/api/posts/stock_remove', {favourite: data.stock_list.symbol}, {withCredentials: true});
+            props.updateStock(data.stock_list.symbol);
         }
-        props.updateStock(data);
     }
+
+    async function removeItem(data){
+        if(localStorage.getItem("searched-stocks")){
+            setActiveTab(0);
+            var localData = JSON.parse(localStorage.getItem("searched-stocks"));
+            localData = localData.filter(symbol =>  symbol !== data.stock_list.symbol)
+            localStorage.setItem("searched-stocks", JSON.stringify(localData));
+            props.removeStock(data.stock_list.symbol);
+        }
+    }
+
 
     const [{isOver}, drop] = useDrop({
         accept: ItemTypes.STOCK_LIST,
-        drop: (item, monitor) => props.updateStock(item.stock_list),
+        drop: (item, monitor) => toggleFavourite(item),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         })
-       })
+    })
 
-
-	return(
-        <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
+    if(stockArray.length > 0){
+        return(
+            <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
             <Nav tabs>
                 {stockArray.map((stockItem, index) => (
                     <div key={index}>
@@ -77,23 +85,28 @@ const StockTabs = (props) => {
                     {stockArray.map((stockItem, index) => (
                         <TabPane tabId={index} key={index}>
                             <Row>
-                                <StockBody starsCount={stockItem.starRating} data={stockItem} index={index} toggleFavourite={toggleFavourite}/>
+                                <StockNewBody starsCount={stockItem.starRating} data={stockItem} index={index} removeItem={removeItem} toggleFavourite={toggleFavourite}/>
                             </Row>
                         </TabPane>
                     ))}
                 </TabContent>
             </Nav>
         </div>
-	);
+    );
+    }else{
+        return(
+        <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
+            <h5>Loading Stocks...</h5>
+        </div>);
+    }
 }
 
 const mapStateToProps = (state) => ({
     stock: state.stock
 })
 
-
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({updateStock}, dispatch)
+    return bindActionCreators({updateStock, removeStock}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(StockTabs);

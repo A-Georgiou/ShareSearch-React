@@ -10,7 +10,7 @@ const VerifyUserDetails = (props) => {
         axios.get('http://localhost:3000/api/user/user_info', {withCredentials: true})
             .then(res =>{
                 const user = {_id: res.data._id, name: res.data.name, email: res.data.email};
-                props.updateUser(user);
+                localStorage.setItem('userInformation', JSON.stringify(user));
             })
     }, []);
 
@@ -20,12 +20,5 @@ const VerifyUserDetails = (props) => {
     );
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user
-})
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({updateUser}, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyUserDetails);
+export default VerifyUserDetails;

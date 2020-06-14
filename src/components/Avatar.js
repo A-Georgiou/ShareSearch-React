@@ -23,7 +23,7 @@ const Avatar = (props) => {
 
 		return(
 			<div className="avatar" style={{backgroundColor: bgCol, width: props.width, height: props.height}}>
-                <p style={{fontSize: props.textSize}}>{props.name}</p> 
+                <p style={{fontSize: props.textSize}}>{props.name === '' ? <FontAwesomeIcon icon={['fa', 'user']}/> : props.name}</p> 
             </div>
         );
 }

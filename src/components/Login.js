@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, FormGroup, Label, Input, FormFeedback, FormText, Button } from 'reactstrap';
 import axios from 'axios';
+import VerifyUserDetails from './VerifyUserDetails';
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
@@ -45,6 +46,7 @@ const Login = (props) => {
                 <Button style={{padding:'.5em', marginTop:'.6em'}} onClick={() => handleLogin()}>{!loggedIn ? 'Log in' : 
                 (<React.Fragment>
                     <h6 style={{margin:'auto', textAlign:'center', paddingBottom: '.5em'}}>Successfully Logged In.</h6>
+                    <VerifyUserDetails />
                     <meta http-equiv = "refresh" content = "1; url = /" />
                 </React.Fragment>)}
                 </Button>

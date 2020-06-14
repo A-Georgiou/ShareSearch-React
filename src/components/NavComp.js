@@ -13,7 +13,8 @@ const NavComp = props => {
     const [{ isDragging }, drag] = useDrag({
         item: {
             type: ItemTypes.STOCK,
-            stock: props.stockItem
+            stock: props.stockItem,
+            index: props.index
         },
         collect: monitor => ({
             isDragging: !!monitor.isDragging()
@@ -24,7 +25,7 @@ const NavComp = props => {
         <div ref={drag} style={isDragging ? {opacity:'0.1'} : {}}>
             <NavItem>
                 <NavLink  className={classnames({ active: props.activeTab === props.index})} onClick={() => { toggle(props.index) }} style={{cursor: 'pointer'}}>
-                    <div>{props.stockItem.name}</div>
+                    <div>{props.stockItem.symbol}</div>
                 </NavLink>
             </NavItem>
         </div>
