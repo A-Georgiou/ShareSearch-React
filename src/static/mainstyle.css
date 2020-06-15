@@ -54,14 +54,18 @@ img{
     padding: 0 .5rem;
 }
 
+div > .nav-item > .nav-link{
+    border: 1px solid rgba(55, 55, 55, 0.2);
+}
+
 .nav-item > .nav-link{
     padding: .2em .5em;
-    border-color: rgba(55, 55, 55, 0.4);
 }
 
 .nav-tabs .nav-link.active{
-    background-color: #f5f5f5;
-    border-color: rgba(55, 55, 55, 0.3)
+    background-color: #F6F6F2;
+    border-bottom: 0;
+    border-color: rgba(55, 55, 55, 0.3);
 }
 
 .nav-bar-l{
@@ -167,6 +171,12 @@ img{
     background-color: white;
 }
 
+
+.watch-data:hover{
+    
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.6);
+}
 
 .stock-info{
     margin: 1em 2.2em;

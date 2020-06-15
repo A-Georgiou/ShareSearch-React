@@ -77,7 +77,7 @@ const StockTabs = (props) => {
             <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
             <Nav tabs>
                 {stockArray.map((stockItem, index) => (
-                    <div key={index}>
+                    <div key={index} >
                         <NavComp toggleFunc={setActiveTab}  stockItem={stockItem} index={index} activeTab={activeTab}/>
                     </div>
                 ))}
@@ -96,7 +96,7 @@ const StockTabs = (props) => {
     }else{
         return(
         <div className="stock-tabs" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
-            <h5>Loading Stocks...</h5>
+            <h4 style={{padding:'1em'}}>Search for a stock to begin...</h4>
         </div>);
     }
 }

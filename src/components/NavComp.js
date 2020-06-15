@@ -24,8 +24,8 @@ const NavComp = props => {
     return(
         <div ref={drag} style={isDragging ? {opacity:'0.1'} : {}}>
             <NavItem>
-                <NavLink  className={classnames({ active: props.activeTab === props.index})} onClick={() => { toggle(props.index) }} style={{cursor: 'pointer'}}>
-                    <div>{props.stockItem.symbol}</div>
+                <NavLink  className={classnames({ active: props.activeTab === props.index})} onClick={() => { toggle(props.index) }} style={{cursor: 'pointer', padding:'.3em .3em', fontSize:'1.2em'}}>
+                    <div><b>{props.stockItem.symbol}</b></div>
                 </NavLink>
             </NavItem>
         </div>
