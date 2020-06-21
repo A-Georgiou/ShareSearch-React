@@ -7,11 +7,13 @@ import { updateUser } from '../actions/index';
 const VerifyUserDetails = (props) => {
     
     useEffect(() => {
+        if(typeof localStorage !== "undefined"){
         axios.get('http://localhost:3000/api/user/user_info', {withCredentials: true})
             .then(res =>{
                 const user = {_id: res.data._id, name: res.data.name, email: res.data.email};
                 localStorage.setItem('userInformation', JSON.stringify(user));
             })
+        }
     }, []);
 
     return(

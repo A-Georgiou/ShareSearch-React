@@ -10,27 +10,30 @@ import axios from 'axios';
 const WatchList = (props) =>  {
    	const [stockArray, setStockArray] = useState([]);
 	const [updatedVal, setUpdatedVal] = useState(0);
-  useEffect(() => {
-	async function fetchData(){
 
-        const result = await axios.get('http://localhost:3000/api/posts/favourites', {withCredentials: true})
-        localStorage.setItem('favourites', JSON.stringify(result.data.favourites))
-        const favourites = result.data.favourites;
-        let stock = [];
-        for(var i = 0; i < favourites.length; i++){
-            const apiUrl = `http://localhost:3001/api/getBothData?symbol=${favourites[i]}`;
-			const resultAPI = await axios.get(apiUrl);
-			resultAPI.data.historicalStock = resultAPI.data.historicalStock.reverse();
-            stock.push(resultAPI.data);
-        }
-        
-        setStockArray(stock);
-        }
+  	useEffect(() => {
+		  if(typeof localStorage !== "undefined"){
+			async function fetchData(){
+				const result = await axios.get('http://localhost:3000/api/posts/favourites', {withCredentials: true})
+				localStorage.setItem('favourites', JSON.stringify(result.data.favourites))
+				const favourites = result.data.favourites;
+				let stock = [];
+				for(var i = 0; i < favourites.length; i++){
+					const apiUrl = `http://localhost:3001/api/getBothData?symbol=${favourites[i]}`;
+					const resultAPI = await axios.get(apiUrl);
+					resultAPI.data.historicalStock = resultAPI.data.historicalStock.reverse();
+					stock.push(resultAPI.data);
+				}
+				
+				setStockArray(stock);
+			}
 
-        fetchData();
-  }, [updatedVal, props.stock.stocks]);
+			fetchData();
+		}
+  	}, [updatedVal, props.stock.stocks]);
 
    async function toggleFavourite(data){
+	   if(typeof localStorage !== "undefined"){
 		if (stockArray.filter(e => e.symbol === data.stock.symbol).length > 0) {
 			console.log('value already exists');
 		}else{
@@ -41,6 +44,7 @@ const WatchList = (props) =>  {
 			await props.removeStock(data.stock.symbol);
 			await setUpdatedVal(updatedVal+1);
 		}
+	}
    }
 
    const [{isOver}, drop] = useDrop({
@@ -51,6 +55,7 @@ const WatchList = (props) =>  {
 	})
    })
 
+
 	return(
 		<div className="watch-list" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
 				<div className="header">
@@ -58,7 +63,7 @@ const WatchList = (props) =>  {
 				</div>
 				<hr style={{borderWidth: "1px"}}/>
 				{stockArray.map((data, id) => (
-					<div key={id}>
+					<div key={id} onClick={() => {props.setSelectedFavourite && props.setSelectedFavourite(data.symbol)}}>
 							<WatchStocks borderCol={'red'} data={data} index={id}  />
 						<hr/>
 					</div>

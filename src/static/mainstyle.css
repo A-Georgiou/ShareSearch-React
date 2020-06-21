@@ -173,9 +173,8 @@ div > .nav-item > .nav-link{
 
 
 .watch-data:hover{
-    
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.6);
+    opacity: 0.6;
 }
 
 .stock-info{
@@ -227,9 +226,10 @@ div > .nav-item > .nav-link{
 
 
 .watch-list{
+    resize: horizontal;
+    overflow: auto;
     color: black;
     height: 95vh;
-    overflow-y: scroll;
     background-color: #F4F4F4;
     border-right: 4px solid rgba(55, 55, 55, 0.3);
     width: 20%;
@@ -239,6 +239,14 @@ div > .nav-item > .nav-link{
 .watch-list::-webkit-scrollbar {
     display: none;
   }
+
+.missing-stock{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+      
+}
 
 
 .header{
@@ -283,3 +291,6 @@ div > .nav-item > .nav-link{
     border-radius: 2px;
 }
 
+.watch-list-information{
+    padding: 2em;
+}

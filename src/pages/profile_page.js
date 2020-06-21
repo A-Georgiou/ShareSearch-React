@@ -7,8 +7,10 @@ import Avatar from '../components/Avatar';
 class Profile extends React.Component {
 	render(){
 	var user = null;
-	if(localStorage.getItem("userInformation") !== null){
-		user = JSON.parse(localStorage.getItem("userInformation"))
+	if(typeof localStorage !== "undefined"){
+		if(localStorage.getItem("userInformation") !== null){
+			user = JSON.parse(localStorage.getItem("userInformation"))
+		}	
 	}
 	if(user !== null){
 	return(

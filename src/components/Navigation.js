@@ -29,24 +29,28 @@ const Navigation = (props) => {
     const toggle = () => setIsOpen(!isOpen);
     var currUser = '';
 
-    if(localStorage.getItem("userInformation") !== null){
-        currUser = JSON.parse(localStorage.getItem("userInformation")).name.split(" ").map((n)=>n[0]).join("");
+    if(typeof localStorage !== "undefined"){
+        if(localStorage.getItem("userInformation") !== null){
+            currUser = JSON.parse(localStorage.getItem("userInformation")).name.split(" ").map((n)=>n[0]).join("");
+        }
     }
 
     const logoutUser = () => {
-         axios.post('http://localhost:3000/api/user/logout', {}, {withCredentials: true})
-             .then(res => {
-                 localStorage.clear();
-                 setLoggedIn(false);
-             }).catch(err=>{console.log('cannot log user out')})
+        if(typeof localStorage !== "undefined"){
+            axios.post('http://localhost:3000/api/user/logout', {}, {withCredentials: true})
+                .then(res => {
+                    localStorage.clear();
+                    setLoggedIn(false);
+                }).catch(err=>{console.log('cannot log user out')})
+        }     
     }
 
     const handleChange = (e) => {
         setSearchBar(e.target.value);
     }
 
-    const handleSubmit = (e) => {
-        props.updateStock(searchBar);
+    const handleSubmit = async (e) => {
+        props.updateStock(searchBar.toUpperCase());
     }
 
 	return(

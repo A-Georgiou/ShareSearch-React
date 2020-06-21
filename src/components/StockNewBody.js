@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core"; 
 import { faStar as faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar} from "@fortawesome/free-regular-svg-icons";
@@ -12,12 +11,11 @@ import {
 library.add( faStar, farStar);
 
 const StockNewBody = (props) => {
-
 		return(
 			<div className="scatter-data">
 				<div className="header-information">
 					<h1 className="stock-name">{props.data.name}</h1>
-					<Button style={{fontSize: '1em'}} className="favourite-button" onClick={() => props.toggleFavourite({stock_list: props.data})}>Add to favourites</Button>
+					<Button style={{fontSize: '1em'}} className="favourite-button" onClick={() => props.addFavourite({stock: props.data})}>Add to favourites</Button>
 					<Button style={{fontSize: '1em'}} className="favourite-button" onClick={() => props.removeItem({stock_list: props.data})}>Close Stock Window</Button>
 				</div>
 				<div className="stock-main-body">
