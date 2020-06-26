@@ -19,7 +19,7 @@ const Login = (props) => {
 
     function handleLogin(){
         if(email != '' && password != ''){
-            axios.post('http://167.172.57.114:3000/api/user/login', {email: email, password: password}, {withCredentials: true})
+            axios.post('https://167.172.57.114:3000/api/user/login', {email: email, password: password}, {withCredentials: true})
                 .then(res => {
                     setValidAccount(true);
                     setLoggedIn(true);
