@@ -23,7 +23,7 @@ const Register = (props) => {
 
     function handleEmailChange(e){
         setEmail(e.target.value);
-        axios.post('http://localhost:3000/api/user/register/validateEmail', {email: e.target.value}, {withCredentials: true})
+        axios.post('http://167.172.57.114:3000/api/user/register/validateEmail', {email: e.target.value}, {withCredentials: true})
         .then(res => {
             setEmailFeedback(res.data.responseText);
             setValidEmail(res.data.valid);
@@ -45,7 +45,7 @@ const Register = (props) => {
     function handleSubmit(){
         if(email !== '' && password !== '' && firstName !== '' && surname !== ''){
             var name = firstName + ' ' + surname;
-            axios.post('http://localhost:3000/api/user/register', {name: name, email: email, password: password})
+            axios.post('http://167.172.57.114:3000/api/user/register', {name: name, email: email, password: password})
                 .then(res => {
                     setRegistered(true);
                 })
