@@ -10,7 +10,8 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "clean": "gatsby clean"
+    "clean": "gatsby clean",
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -32,6 +33,9 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "gh-pages": "^6.1.1",
+    "install": "^0.13.0",
+    "npm": "^10.8.3",
     "prettier": "3.3.3",
     "redux-devtools": "^3.7.0"
   }
