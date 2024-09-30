@@ -76,15 +76,15 @@ const Navigation = (props) => {
                             <Avatar name={currUser ? currUser : ''}/>
                             </DropdownToggle>
                             <DropdownMenu right>
-                                <DropdownItem tag="a" href="/">
+                                <DropdownItem tag="a" href="/ShareSearch-React/">
                                     Home
                                 </DropdownItem>
                                 {currUser !== '' ? (
                                     <React.Fragment>
-                                        <DropdownItem tag="a" href="/profile_page">
+                                        <DropdownItem tag="a" href="/ShareSearch-React/profile_page">
                                             Profile Page
                                         </DropdownItem>
-                                        <DropdownItem tag="a" href="/my_stocks">
+                                        <DropdownItem tag="a" href="/ShareSearch-React/my_stocks">
                                             My Stocks
                                         </DropdownItem>
                                     </React.Fragment>
@@ -93,11 +93,11 @@ const Navigation = (props) => {
                                 )}
                                 <DropdownItem divider />
                                 {currUser === '' ? (
-                                    <DropdownItem tag="a" href="/account_page">
+                                    <DropdownItem tag="a" href="/ShareSearch-React/account_page">
                                         Log in
                                     </DropdownItem>
                                 ) : (
-                                    <DropdownItem tag="a" href="/" onClick={logoutUser}>
+                                    <DropdownItem tag="a" href="/ShareSearch-React/" onClick={logoutUser}>
                                         Logout
                                     </DropdownItem>
                                 )}
