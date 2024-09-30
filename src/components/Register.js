@@ -23,11 +23,13 @@ const Register = (props) => {
 
     function handleEmailChange(e){
         setEmail(e.target.value);
+        /*
         axios.post('http://167.172.57.114:3000/api/user/register/validateEmail', {email: e.target.value}, {withCredentials: true})
         .then(res => {
             setEmailFeedback(res.data.responseText);
             setValidEmail(res.data.valid);
         })
+        */
     }
 
     function handlePasswordChange(e){

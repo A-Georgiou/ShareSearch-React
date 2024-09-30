@@ -34,8 +34,9 @@ const StockTabs = (props) => {
             }
 
             localStorage.setItem("searched-stocks", JSON.stringify(newLocal));
-
+           
             async function fetchData(){
+                 /*
                 const result = JSON.parse(localStorage.getItem("searched-stocks"));
                 let stock = [];
                 for(var i = 0; i < result.length; i++){
@@ -53,7 +54,9 @@ const StockTabs = (props) => {
                     }
                 }
                 setStockArray(stock);
+                */
             }
+            
             fetchData();
         }
       }, [props.stock.stocks]);
@@ -62,8 +65,10 @@ const StockTabs = (props) => {
         if (stockArray.filter(e => e.symbol === data.stock_list.symbol).length > 0) {
             console.log('value already exists');
         }else{
+            /*
             const result = await axios.post('http://localhost:3000/api/posts/stock_remove', {favourite: data.stock_list.symbol}, {withCredentials: true});
             props.updateStock(data.stock_list.symbol);
+            */
         }
     }
 
@@ -79,12 +84,14 @@ const StockTabs = (props) => {
             if (currFavourites.filter(e => e.symbol === data.stock.symbol).length > 0) {
                 console.log('value already exists');
             }else{
+                /*
                 const result = await axios.post('http://localhost:3000/api/posts/stock_favourite', {favourite: data.stock.symbol}, {withCredentials: true});
                 var localData = JSON.parse(localStorage.getItem("searched-stocks"));
                 localData = localData.filter(symbol =>  symbol !== data.stock.symbol)
                 localStorage.setItem("searched-stocks", JSON.stringify(localData));
                 await props.removeStock(data.stock.symbol);
                 await setUpdatedVal(updatedVal+1);
+                */
             }
         }
     }

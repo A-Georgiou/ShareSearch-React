@@ -19,6 +19,7 @@ const Login = (props) => {
 
     function handleLogin(){
         if(email != '' && password != ''){
+            /*
             axios.post('https://167.172.57.114:3000/api/user/login', {email: email, password: password}, {withCredentials: true})
                 .then(res => {
                     setValidAccount(true);
@@ -26,6 +27,7 @@ const Login = (props) => {
                 }).catch(err => {
                     setValidAccount(false);
                 })
+            */
         }
     }
 	return(

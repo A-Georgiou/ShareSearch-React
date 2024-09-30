@@ -13,7 +13,9 @@ const WatchList = (props) =>  {
 
   	useEffect(() => {
 		  if(typeof localStorage !== "undefined"){
+			
 			async function fetchData(){
+				/*
 				const result = await axios.get('http://localhost:3000/api/posts/favourites', {withCredentials: true})
 				localStorage.setItem('favourites', JSON.stringify(result.data.favourites))
 				const favourites = result.data.favourites;
@@ -26,9 +28,11 @@ const WatchList = (props) =>  {
 				}
 				
 				setStockArray(stock);
+				*/
 			}
 
 			fetchData();
+			
 		}
   	}, [updatedVal, props.stock.stocks]);
 
@@ -37,12 +41,14 @@ const WatchList = (props) =>  {
 		if (stockArray.filter(e => e.symbol === data.stock.symbol).length > 0) {
 			console.log('value already exists');
 		}else{
+			/*
 			const result = await axios.post('http://localhost:3000/api/posts/stock_favourite', {favourite: data.stock.symbol}, {withCredentials: true});
 			var localData = JSON.parse(localStorage.getItem("searched-stocks"));
             localData = localData.filter(symbol =>  symbol !== data.stock.symbol)
             localStorage.setItem("searched-stocks", JSON.stringify(localData));
 			await props.removeStock(data.stock.symbol);
 			await setUpdatedVal(updatedVal+1);
+			*/
 		}
 	}
    }
@@ -59,7 +65,7 @@ const WatchList = (props) =>  {
 	return(
 		<div className="watch-list" ref={drop} style={isOver ? {backgroundColor:'rgb(244,244,255)', opacity: '0.2'} : {} }>
 				<div className="header">
-					<p style={{display: 'inline'}} className="chevron">></p><p>My Watchlist</p>
+					<p style={{display: 'inline'}} className="chevron"></p><p>My Watchlist</p>
 				</div>
 				<hr style={{borderWidth: "1px"}}/>
 				{stockArray.map((data, id) => (

@@ -37,11 +37,13 @@ const Navigation = (props) => {
 
     const logoutUser = () => {
         if(typeof localStorage !== "undefined"){
+            /*
             axios.post('http://localhost:3000/api/user/logout', {}, {withCredentials: true})
                 .then(res => {
                     localStorage.clear();
                     setLoggedIn(false);
                 }).catch(err=>{console.log('cannot log user out')})
+            */
         }     
     }
 
